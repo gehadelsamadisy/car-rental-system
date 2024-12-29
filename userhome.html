@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Home</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        text-align: center;
+      }
+      .button {
+        display: block;
+        width: 200px;
+        padding: 10px;
+        margin: 10px auto;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to Your Home Page</h1>
+      <p id="user-name">You have successfully registered and logged in.</p>
+      <a href="view-cars.html" class="button">View Cars</a>
+      <a href="search.html" class="button">Search Available Cars</a>
+      <a href="advanced-search.html" class="button">Advanced Search</a>
+      <a href="reports.html" class="button">History</a>
+      <a href="logout.php" class="button">Logout</a>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("get-user-info.php")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              alert(data.error);
+            } else {
+              document.getElementById(
+                "user-name"
+              ).textContent = `Welcome, ${data.first_name} ${data.last_name}`;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user info:", error);
+          });
+      });
+    </script>
+  </body>
+</html>

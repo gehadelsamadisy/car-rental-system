@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register a New Car</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        text-align: center;
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      .form-group input,
+      .form-group select {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Register a New Car</h1>
+      <form action="register-car.php" method="POST">
+        <div class="form-group">
+          <input type="text" name="plate_id" placeholder="Plate ID" required />
+        </div>
+        <div class="form-group">
+          <input type="text" name="brand" placeholder="Brand" required />
+        </div>
+        <div class="form-group">
+          <input type="text" name="model" placeholder="Model" required />
+        </div>
+        <div class="form-group">
+          <input type="text" name="color" placeholder="Color" required />
+        </div>
+        <div class="form-group">
+          <input type="number" name="year" placeholder="Year" required />
+        </div>
+        <div class="form-group">
+          <input type="number" name="price" placeholder="Price" required />
+        </div>
+        <div class="form-group">
+          <input
+            type="number"
+            name="office_id"
+            placeholder="Office ID"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <select name="status" required>
+            <option value="Active">Active</option>
+            <option value="Out of Service">Out of Service</option>
+            <option value="Rented">Rented</option>
+          </select>
+        </div>
+        <button type="submit" class="button">Register Car</button>
+      </form>
+    </div>
+  </body>
+</html>
