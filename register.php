@@ -27,7 +27,7 @@ if ($result->num_rows > 0) {
     $sql = "INSERT INTO customers (fname, lname, email, phone, address, password, role) VALUES ('$fname', '$lname', '$email', '$phone', '$address', '$password', 'Customer')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('User registered successfully!'); window.location.href = 'userhome.html';</script>";
+        echo "<script>alert('User registered successfully!'); window.location.href = 'login.html';</script>";
     } else {
         echo "<script>alert('Error: " . $conn->error . "'); window.location.href = 'register.html';</script>";
     }
