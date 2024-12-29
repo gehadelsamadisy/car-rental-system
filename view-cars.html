@@ -136,49 +136,56 @@
                                 <td>${car.status}</td>
                                 <td>${car.location}</td>
                                 <td>
-                                    ${
-                                      car.status === "Active"
-                                        ? `
-                                        <form action="customer-rent-car.php" method="POST" style="display:inline;">
-                                            <input type="hidden" name="car_id" value="${car.Car_ID}">
-                                            <input type="hidden" name="user_email" value="${car.user_email}">
-                                            <button type="submit" class="button">Rent</button>
-                                        </form>
-                                    `
-                                        : ""
-                                    }
+                                  ${
+                                    !car.isAdmin && car.status === "Active"
+                                      ? `
+                                    <form action="customer-rent-car.php" method="POST" style="display:inline;">
+                                      <input type="hidden" name="car_id" value="${car.Car_ID}">
+                                      <input type="hidden" name="user_email" value="${car.user_email}">
+                                      <button type="submit" class="button">Rent</button>
+                                    </form>
+                                  `
+                                      : ""
+                                  }
                                 </td>
                                 ${
                                   car.isAdmin
                                     ? `
                                 <td>
-                                    <form action="update-car-status.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="car_id" value="${
-                                          car.Car_ID
-                                        }">
-                                        <select name="status">
-                                            <option value="Active" ${
-                                              car.status === "Active"
-                                                ? "selected"
-                                                : ""
-                                            }>Active</option>
-                                            <option value="Out of Service" ${
-                                              car.status === "Out of Service"
-                                                ? "selected"
-                                                : ""
-                                            }>Out of Service</option>
-                                            <option value="Rented" ${
-                                              car.status === "Rented"
-                                                ? "selected"
-                                                : ""
-                                            }>Rented</option>
-                                        </select>
-                                        <button type="submit" class="button">Update</button>
-                                    </form>
+                                  <form action="update-car-status.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="car_id" value="${
+                                      car.Car_ID
+                                    }">
+                                    <select name="status">
+                                      <option value="Active" ${
+                                        car.status === "Active"
+                                          ? "selected"
+                                          : ""
+                                      }>Active</option>
+                                      <option value="Out of Service" ${
+                                        car.status === "Out of Service"
+                                          ? "selected"
+                                          : ""
+                                      }>Out of Service</option>
+                                      <option value="Rented" ${
+                                        car.status === "Rented"
+                                          ? "selected"
+                                          : ""
+                                      }>Rented</option>
+                                    </select>
+                                    <button type="submit" class="button">Update</button>
+                                  </form>
+                                  <form action="admin-rent-car.html" method="GET" style="display:inline;">
+                                    <input type="hidden" name="car_id" value="${
+                                      car.Car_ID
+                                    }">
+                                    <button type="submit" class="button">Rent</button>
+                                  </form>
                                 </td>
                                 `
                                     : ""
                                 }
+                             
                             `;
                 carTableBody.appendChild(row);
                 if (car.isAdmin) {

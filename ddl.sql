@@ -18,7 +18,7 @@ CREATE TABLE customers(
 	customer_id int AUTO_INCREMENT PRIMARY KEY,
     fname varchar(50) NOT null,
     lname varchar(50) not null,
-    email varchar(100) not null,
+    email varchar(100) not null UNIQUE,
     phone varchar(20) not null,
     address varchar(200) not null,  
     password VARCHAR(255) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE customers(
 
 
 CREATE TABLE reservations(
-    	reservation_id int AUTO_INCREMENT not null PRIMARY KEY,
+    reservation_id int AUTO_INCREMENT not null PRIMARY KEY,
    	car_id int NOT null,
     customer_id int not null,
     reservation_date date not null,
