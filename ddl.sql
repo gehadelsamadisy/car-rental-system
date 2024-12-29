@@ -20,10 +20,9 @@ CREATE TABLE customers(
     lname varchar(50) not null,
     email varchar(100) not null,
     phone varchar(20) not null,
-    address varchar(200) not null  
-    role enum ALTER TABLE customers 
+    address varchar(200) not null,  
     password VARCHAR(255) NOT NULL,
-    role ENUM('Admin', 'Customer') DEFAULT 'Customer';
+    role ENUM('Admin', 'Customer') DEFAULT 'Customer'
 );
 
 

@@ -15,6 +15,9 @@ if ($conn->connect_error) {
 $car_id = $_POST['car_id'];
 $customer_email = $_SESSION['email'];
 
+echo "<script>alert('User email: $customer_email');</script>";
+
+
 // Get customer ID from email
 $customer_result = $conn->query("SELECT customer_id FROM customers WHERE email='$customer_email'");
 $customer = $customer_result->fetch_assoc();

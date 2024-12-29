@@ -12,9 +12,7 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
-if (!isset($_SESSION['email'])) {
-    die(json_encode(["error" => "User not logged in"]));
-}
+
 
 $user_email = $_SESSION['email'];
 
