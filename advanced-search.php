@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -10,38 +12,57 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$car_info = $_GET['car_info'] ?? '';
-$customer_info = $_GET['customer_info'] ?? '';
-$reservation_date = $_GET['reservation_date'] ?? '';
+$isAdmin = isset($_SESSION['admin_email']);
+$conditions = [];
 
-$sql = "SELECT cars.Car_ID, cars.plate_id, cars.brand, cars.model, cars.color, cars.year, cars.price, cars.status, cars.location, customers.name AS customer_name, customers.email AS customer_email, reservations.reservation_date, reservations.pickup_date, reservations.return_date
-        FROM cars
-        LEFT JOIN reservations ON cars.Car_ID = reservations.car_id
-        LEFT JOIN customers ON reservations.customer_id = customers.customer_id
-        WHERE 1=1";
-
-if (!empty($car_info)) {
-    $sql .= " AND (cars.brand LIKE '%$car_info%' OR cars.model LIKE '%$car_info%' OR cars.color LIKE '%$car_info%' OR cars.year LIKE '%$car_info%')";
+// Add conditions based on the filters provided
+if (!empty($_GET['brand'])) {
+    $conditions[] = "cars.brand LIKE '%" . $conn->real_escape_string($_GET['brand']) . "%'";
+}
+if (!empty($_GET['model'])) {
+    $conditions[] = "cars.model LIKE '%" . $conn->real_escape_string($_GET['model']) . "%'";
+}
+if (!empty($_GET['year'])) {
+    $conditions[] = "cars.year LIKE '%" . $conn->real_escape_string($_GET['year']) . "%'";
+}
+if (!empty($_GET['color'])) {
+    $conditions[] = "cars.color LIKE '%" . $conn->real_escape_string($_GET['color']) . "%'";
+}
+if (!empty($_GET['customer_name'])) {
+    $conditions[] = "reservations.customer_name LIKE '%" . $conn->real_escape_string($_GET['customer_name']) . "%'";
+}
+if (!empty($_GET['customer_email'])) {
+    $conditions[] = "reservations.customer_email LIKE '%" . $conn->real_escape_string($_GET['customer_email']) . "%'";
+}
+if (!empty($_GET['reservation_date'])) {
+    $conditions[] = "reservations.reservation_date = '" . $conn->real_escape_string($_GET['reservation_date']) . "'";
 }
 
-if (!empty($customer_info)) {
-    $sql .= " AND (customers.name LIKE '%$customer_info%' OR customers.email LIKE '%$customer_info%')";
-}
+// Join `reservations` table to get customer details
+$sql = "SELECT 
+            cars.*, 
+            offices.location, 
+            reservations.customer_name, 
+            reservations.customer_email, 
+            reservations.reservation_date 
+        FROM cars 
+        JOIN offices ON cars.office_id = offices.office_id
+        LEFT JOIN reservations ON cars.Car_ID = reservations.car_id";
 
-if (!empty($reservation_date)) {
-    $sql .= " AND (reservations.reservation_date LIKE '%$reservation_date%' OR reservations.pickup_date LIKE '%$reservation_date%' OR reservations.return_date LIKE '%$reservation_date%')";
+if (count($conditions) > 0) {
+    $sql .= " WHERE " . implode(" AND ", $conditions);
 }
 
 $result = $conn->query($sql);
 
-$searchResults = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $searchResults[] = $row;
-    }
+$cars = [];
+while ($row = $result->fetch_assoc()) {
+    $row['isAdmin'] = $isAdmin;
+    $cars[] = $row;
 }
 
-echo json_encode($searchResults);
+header('Content-Type: application/json');
+echo json_encode($cars);
 
 $conn->close();
 ?>

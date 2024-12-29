@@ -60,19 +60,30 @@
   <body>
     <div class="container">
       <h1>Advanced Search</h1>
-      <form id="advancedSearchForm">
+      <form id="searchForm">
         <div class="form-group">
-          <input
-            type="text"
-            name="car_info"
-            placeholder="Car Information (Brand, Model, etc.)"
-          />
+          <input type="text" name="brand" placeholder="Brand" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="model" placeholder="Model" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="year" placeholder="Year" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="color" placeholder="Color" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="fname" placeholder="First Name" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="lname" placeholder="Last Name" />
         </div>
         <div class="form-group">
           <input
             type="text"
-            name="customer_info"
-            placeholder="Customer Information (Name, Email, etc.)"
+            name="customer_email"
+            placeholder="Customer Email"
           />
         </div>
         <div class="form-group">
@@ -84,11 +95,12 @@
         </div>
         <button type="submit" class="button">Search</button>
       </form>
+
       <table>
         <thead>
           <tr>
-            <th>Car ID</th>
-            <th>Plate ID</th>
+            <th id="carIdHeader" style="display: none">Car ID</th>
+            <th id="plateIdHeader" style="display: none">Plate ID</th>
             <th>Brand</th>
             <th>Model</th>
             <th>Color</th>
@@ -96,56 +108,124 @@
             <th>Price / month</th>
             <th>Status</th>
             <th>Office Location</th>
-            <th>Customer Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Customer Email</th>
             <th>Reservation Date</th>
-            <th>Pickup Date</th>
-            <th>Return Date</th>
+            <th>Action</th>
+            <th id="changeStatusHeader" style="display: none">Change Status</th>
           </tr>
         </thead>
-        <tbody id="searchResultsBody">
-          <!-- Search results will be inserted here by JavaScript -->
+        <tbody id="carTableBody">
+          <!-- Car rows will be inserted here by JavaScript -->
         </tbody>
       </table>
     </div>
     <script>
-      document
-        .getElementById("advancedSearchForm")
-        .addEventListener("submit", function (event) {
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchForm = document.getElementById("searchForm");
+        searchForm.addEventListener("submit", function (event) {
           event.preventDefault();
-          fetchAdvancedSearchResults(new FormData(event.target));
+          fetchCars(new FormData(searchForm));
         });
 
-      function fetchAdvancedSearchResults(formData) {
-        let query = new URLSearchParams(formData).toString();
-        fetch("advanced-search.php?" + query)
-          .then((response) => response.json())
-          .then((data) => {
-            const searchResultsBody =
-              document.getElementById("searchResultsBody");
-            searchResultsBody.innerHTML = "";
-            data.forEach((result) => {
-              const row = document.createElement("tr");
-              row.innerHTML = `
-                            <td>${result.Car_ID}</td>
-                            <td>${result.plate_id}</td>
-                            <td>${result.brand}</td>
-                            <td>${result.model}</td>
-                            <td>${result.color}</td>
-                            <td>${result.year}</td>
-                            <td>${result.price}</td>
-                            <td>${result.status}</td>
-                            <td>${result.location}</td>
-                            <td>${result.customer_name}</td>
-                            <td>${result.customer_email}</td>
-                            <td>${result.reservation_date}</td>
-                            <td>${result.pickup_date}</td>
-                            <td>${result.return_date}</td>
-                        `;
-              searchResultsBody.appendChild(row);
+        fetchCars();
+
+        function fetchCars(formData = null) {
+          let query = "";
+          if (formData) {
+            query = new URLSearchParams(formData).toString();
+          }
+          fetch("get-cars.php?" + query)
+            .then((response) => response.json())
+            .then((data) => {
+              const carTableBody = document.getElementById("carTableBody");
+              const carIdHeader = document.getElementById("carIdHeader");
+              const plateIdHeader = document.getElementById("plateIdHeader");
+              const changeStatusHeader =
+                document.getElementById("changeStatusHeader");
+              carTableBody.innerHTML = "";
+              data.forEach((car) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                                    ${
+                                      car.isAdmin
+                                        ? `<td>${car.Car_ID}</td><td>${car.plate_id}</td>`
+                                        : ""
+                                    }
+                                    <td>${car.brand}</td>
+                                    <td>${car.model}</td>
+                                    <td>${car.color}</td>
+                                    <td>${car.year}</td>
+                                    <td>${car.price}</td>
+                                    <td>${car.status}</td>
+                                    <td>${car.location}</td>
+                                    <td>${car.fname || "N/A"}</td>
+                                    <td>${car.lname || "N/A"}</td>
+                                    <td>${car.customer_email || "N/A"}</td>
+                                    <td>${car.reservation_date || "N/A"}</td>
+                                    <td>
+                                        ${
+                                          !car.isAdmin &&
+                                          car.status === "Active"
+                                            ? `
+                                                <form action="customer-rent-car.php" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="car_id" value="${car.Car_ID}">
+                                                    <button type="submit" class="button">Rent</button>
+                                                </form>
+                                            `
+                                            : ""
+                                        }
+                                    </td>
+                                    ${
+                                      car.isAdmin
+                                        ? `
+                                    <td>
+                                        <form action="update-car-status.php" method="POST" style="display:inline;">
+                                            <input type="hidden" name="car_id" value="${
+                                              car.Car_ID
+                                            }">
+                                            <select name="status">
+                                                <option value="Active" ${
+                                                  car.status === "Active"
+                                                    ? "selected"
+                                                    : ""
+                                                }>Active</option>
+                                                <option value="Out of Service" ${
+                                                  car.status ===
+                                                  "Out of Service"
+                                                    ? "selected"
+                                                    : ""
+                                                }>Out of Service</option>
+                                                <option value="Rented" ${
+                                                  car.status === "Rented"
+                                                    ? "selected"
+                                                    : ""
+                                                }>Rented</option>
+                                            </select>
+                                            <button type="submit" class="button">Update</button>
+                                        </form>
+                                        <form action="admin-rent-car.html" method="GET" style="display:inline;">
+                                            <input type="hidden" name="car_id" value="${
+                                              car.Car_ID
+                                            }">
+                                            <button type="submit" class="button">Rent</button>
+                                        </form>
+                                    </td>
+                                    `
+                                        : ""
+                                    }
+                                `;
+                carTableBody.appendChild(row);
+                if (car.isAdmin) {
+                  carIdHeader.style.display = "table-cell";
+                  plateIdHeader.style.display = "table-cell";
+                  changeStatusHeader.style.display = "table-cell";
+                }
+              });
             });
-          });
-      }
+        }
+      });
     </script>
   </body>
 </html>
