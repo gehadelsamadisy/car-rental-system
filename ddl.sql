@@ -39,8 +39,6 @@ CREATE TABLE reservations(
 );
 
 
-
-
 CREATE TABLE offices(
 	office_id int AUTO_INCREMENT PRIMARY key,
     name varchar(50) not null,
@@ -49,8 +47,6 @@ CREATE TABLE offices(
 
 
 );
-
-
 
 
 CREATE TABLE payments(

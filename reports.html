@@ -15,34 +15,48 @@
       }
       .container {
         text-align: center;
+        width: 400px; /* Increase container width */
+        border: 2px solid white; /* Add white border */
+        padding: 20px; /* Add padding inside the border */
+        background-color: #ffffff; /* Add background color to container */
+        border-radius: 10px; /* Add border radius */
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      .form-group input {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
       }
       .button {
-        display: block;
-        width: 200px;
         padding: 10px;
-        margin: 10px auto;
         background-color: #007bff;
         color: white;
-        text-decoration: none;
+        border: none;
         border-radius: 5px;
-        text-align: center;
+        cursor: pointer;
+        margin-top: 20px; /* Add margin-top to create space */
+        width: 100%; /* Increase button width */
+        display: block; /* Make buttons block elements */
+        text-align: center; /* Center text inside buttons */
+        text-decoration: none; /* Remove underline from links */
       }
       .button:hover {
         background-color: #0056b3;
       }
     </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div class="container">
       <h1>View Reports</h1>
-      <a href="report-reservations.html" class="button">Reservations Report</a>
-      <a href="report-car-status.html" class="button">Car Status Report</a>
-      <a href="report-customer-reservations.html" class="button"
-        >Customer Reservations Report</a
-      >
-      <a href="report-daily-payments.html" class="button"
-        >Daily Payments Report</a
-      >
+      <button onclick="location.href='report-reservations.html'" class="button">Interval Reservations Report</button>
+      <button onclick="location.href='report-car-status.html'" class="button">Specific Car Reservation Report</button>
+      <button onclick="location.href='day-car-status.html'" class="button">All Cars Status in a Day</button>
+      <button onclick="location.href='report-customer-reservations.html'" class="button">Specific Customer Reservations Report</button>
+      <button onclick="location.href='report-daily-payments.html'" class="button">Daily Payments Report</button>
     </div>
+    
   </body>
 </html>

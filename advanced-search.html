@@ -19,8 +19,7 @@
       .form-group {
         margin: 10px 0;
       }
-      .form-group input,
-      .form-group select {
+      .form-group input {
         padding: 10px;
         width: 100%;
         box-sizing: border-box;
@@ -50,12 +49,17 @@
       td {
         padding: 10px;
         text-align: left;
+        background-color: white; /* Add this line */
       }
       th {
         background-color: #007bff;
         color: white;
       }
+      h1, label {
+        color: white; /* Add this line */
+      }
     </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div class="container">
@@ -86,7 +90,7 @@
           <input type="date" id="reservationDate" name="reservationDate" />
         </div>
         <button type="submit" class="button">Search</button>
-        <a href="view-cars.html" class="button" style="text-decoration: none; text-align: center;">Normal Search</a>
+        <a href="view-cars.html" class="button" style="text-decoration: none;">Normal Search</a>
       </form>
 
       <table>
@@ -98,7 +102,7 @@
             <th>Model</th>
             <th>Color</th>
             <th>Year</th>
-            <th>Price / month</th>
+            <th>Price / Month</th>
             <th>Status</th>
             <th>Office Location</th>
             <th>First Name</th>

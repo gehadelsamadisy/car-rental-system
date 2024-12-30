@@ -12,23 +12,18 @@
         background-color: #f0f0f0;
         font-family: Arial, sans-serif;
       }
-
       .container {
         width: 80%;
         margin-top: 20px;
       }
-
       .form-group {
         margin: 10px 0;
       }
-
-      .form-group input,
-      .form-group select {
+      .form-group input {
         padding: 10px;
         width: 100%;
         box-sizing: border-box;
       }
-
       .button {
         padding: 10px;
         background-color: #007bff;
@@ -37,36 +32,38 @@
         border-radius: 5px;
         cursor: pointer;
       }
-
       .button:hover {
         background-color: #0056b3;
       }
-
+      .advanced-search-button {
+        margin-top: 10px; /* Add this line */
+      }
       table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
       }
-
       table,
       th,
       td {
         border: 1px solid #ddd;
       }
-
       th,
       td {
         padding: 10px;
         text-align: left;
+        background-color: white; /* Add this line */
       }
-
       th {
         background-color: #007bff;
         color: white;
       }
+      h1, label {
+        color: white; /* Add this line */
+      }
     </style>
+    <link rel="stylesheet" href="style.css">
   </head>
-
   <body>
     <div class="container">
       <h1>View Cars</h1>
@@ -84,9 +81,8 @@
           <input type="text" name="color" placeholder="Color" />
         </div>
         <button type="submit" class="button">Search</button>
-        <a href="advanced-search.html" class="button">Advanced Search</a>
       </form>
-      
+      <!-- <button type="button" class="button advanced-search-button" onclick="location.href='advanced-search.html'">Advanced Search</button> -->
       <table>
         <thead>
           <tr>
@@ -99,6 +95,7 @@
             <th>Price / month</th>
             <th>Status</th>
             <th>Office Location</th>
+            <th>Action</th>
             <th id="changeStatusHeader" style="display: none">Change Status</th>
           </tr>
         </thead>
@@ -107,7 +104,6 @@
         </tbody>
       </table>
     </div>
-
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const searchForm = document.getElementById("searchForm");
@@ -147,7 +143,19 @@
                                 <td>${car.price}</td>
                                 <td>${car.status}</td>
                                 <td>${car.location}</td>
-                                
+                                <td>
+                                  ${
+                                    !car.isAdmin && car.status === "Active"
+                                      ? `
+                                    <form action="customer-rent-car.html" method="GET" style="display:inline;">
+                                      <input type="hidden" name="car_id" value="${car.Car_ID}">
+                                      <input type="hidden" name="user_email" value="${car.user_email}">
+                                      <button type="submit" class="button">Rent</button>
+                                    </form>
+                                  `
+                                      : ""
+                                  }
+                                </td>
                                 ${
                                   car.isAdmin
                                     ? `

@@ -15,32 +15,54 @@
       }
       .container {
         text-align: center;
+        width: 400px; /* Increase container width */
+        border: 2px solid white; /* Add white border */
+        padding: 20px; /* Add padding inside the border */
+        background-color: #ffffff; /* Add background color to container */
+        border-radius: 10px; /* Add border radius */
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      .form-group input {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
       }
       .button {
-        display: block;
-        width: 200px;
         padding: 10px;
-        margin: 10px auto;
         background-color: #007bff;
         color: white;
-        text-decoration: none;
+        border: none;
         border-radius: 5px;
-        text-align: center;
+        cursor: pointer;
+        margin-top: 20px; /* Add margin-top to create space */
+        width: 100%; /* Increase button width */
       }
       .button:hover {
         background-color: #0056b3;
       }
     </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div class="container">
       <h1>Welcome to Admin Home Page</h1>
-      <p>You have successfully logged in as an admin.</p>
-      <a href="register-car.html" class="button">Register a New Car</a>
-      <a href="view-cars.html" class="button">View Cars</a>
-      <a href="advanced-search.html" class="button">Advanced Search</a>
-      <a href="reports.html" class="button">View Reports</a>
-      <a href="logout.php" class="button">Logout</a>
+      <form action="register-car.html">
+        <button type="submit" class="button">Register a New Car</button>
+      </form>
+      <form action="view-cars.html">
+        <button type="submit" class="button">View Cars and Rent</button>
+      </form>
+      <form action="reports.html">
+        <button type="submit" class="button">View Reports</button>
+      </form>
+      <form action="advanced-search.html">
+        <button type="submit" class="button">Advance Search</button>
+      </form>
+      <form action="logout.php">
+        <button type="submit" class="button">Logout</button>
+      </form>
     </div>
   </body>
 </html>

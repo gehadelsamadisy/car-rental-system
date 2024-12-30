@@ -15,29 +15,42 @@
       }
       .container {
         text-align: center;
+        width: 400px; /* Increase container width */
+        border: 2px solid white; /* Add white border */
+        padding: 20px; /* Add padding inside the border */
+        background-color: #ffffff; /* Add background color to container */
+        border-radius: 10px; /* Add border radius */
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      .form-group input {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
       }
       .button {
-        display: block;
-        width: 200px;
         padding: 10px;
-        margin: 10px auto;
         background-color: #007bff;
         color: white;
-        text-decoration: none;
+        border: none;
         border-radius: 5px;
-        text-align: center;
+        cursor: pointer;
+        margin-top: 20px; /* Add margin-top to create space */
+        width: 100%; /* Increase button width */
       }
       .button:hover {
         background-color: #0056b3;
       }
     </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div class="container">
       <h1>Welcome to Car Reservation System</h1>
-      <a href="register.html" class="button">Register New User</a>
-      <a href="login.html" class="button">Login Existing User</a>
-      <a href="admin-login.html" class="button">Admin Login</a>
+      <button class="button" onclick="location.href='register.html'">Register New User</button>
+      <button class="button" onclick="location.href='login.html'">User Login</button>
+      <button class="button" onclick="location.href='admin-login.html'">Admin Login</button>
     </div>
   </body>
 </html>

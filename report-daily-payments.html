@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report Daily Payments</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 80%;
+        margin-top: 20px;
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      .form-group input {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        background-color: white; /* Add this line */
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      h1, label {
+        color: white; /* Add this line */
+      }
+    </style>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Report Daily Payments</h1>
+      <form id="reportForm">
+        <div class="form-group">
+          <label for="start_date">Start Date:</label>
+          <input type="date" id="start_date" name="start_date" required />
+        </div>
+        <div class="form-group">
+          <label for="end_date">End Date:</label>
+          <input type="date" id="end_date" name="end_date" required />
+        </div>
+        <button type="submit" class="button">Generate Report</button>
+        <button type="button" id="allButton" class="button">All</button>
+        <button type="button" id="clearButton" class="button">Clear</button>
+        <button type="button" id="goBackButton" class="button">Go Back</button>
+      </form>
+      <table id="reportTable">
+        <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Reservation ID</th>
+            <th>Payment Date</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Report results will be inserted here by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+      document
+        .getElementById("reportForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          fetchReportResults(new FormData(event.target));
+        });
+
+      document
+        .getElementById("allButton")
+        .addEventListener("click", function () {
+          fetchReportResults();
+        });
+
+      document
+        .getElementById("clearButton")
+        .addEventListener("click", function () {
+          clearReportResults();
+        });
+
+      document
+        .getElementById("goBackButton")
+        .addEventListener("click", function () {
+          window.location.href = "reports.html";
+        });
+
+      function fetchReportResults(formData = null) {
+        let query = formData ? new URLSearchParams(formData).toString() : "";
+        fetch("report-daily-payments.php?" + query)
+          .then((response) => response.json())
+          .then((data) => {
+            const reportTableBody =
+              document.querySelector("#reportTable tbody");
+            reportTableBody.innerHTML = "";
+            if (data.error) {
+              alert(data.error);
+            } else {
+              data.forEach((result) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                                <td>${result.payment_id}</td>
+                                <td>${result.reservation_id}</td>
+                                <td>${result.payment_date}</td>
+                                <td>${result.amount}</td>
+                            `;
+                reportTableBody.appendChild(row);
+              });
+            }
+          });
+      }
+
+      function clearReportResults() {
+        const reportTableBody = document.querySelector("#reportTable tbody");
+        reportTableBody.innerHTML = "";
+      }
+    </script>
+  </body>
+</html>

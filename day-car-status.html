@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day Car Status</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 80%;
+        margin-top: 20px;
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      .form-group input {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        background-color: white; /* Add this line */
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      h1, label {
+        color: white; /* Add this line */
+      }
+    </style>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Day Car Status</h1>
+      <form id="statusForm">
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+        <button type="submit" class="button">Get Status</button>
+        <button type="button" id="showAllButton" class="button">Show All</button>
+        <button type="button" id="clearButton" class="button">Clear</button>
+        <button type="button" id="goBackButton" class="button">Go Back</button>
+      </form>
+      <table id="statusTable">
+        <thead>
+          <tr>
+            <th>Car ID</th>
+            <th>Plate ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Year</th>
+            <th>Price / month</th>
+            <th>Status</th>
+            <th>Office Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Status results will be inserted here by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+      document
+        .getElementById("statusForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          fetchStatusResults(new FormData(event.target));
+        });
+
+      document
+        .getElementById("showAllButton")
+        .addEventListener("click", function () {
+          fetchStatusResults(null);
+        });
+
+      document
+        .getElementById("clearButton")
+        .addEventListener("click", function () {
+          document.querySelector("#statusTable tbody").innerHTML = "";
+        });
+
+      document
+        .getElementById("goBackButton")
+        .addEventListener("click", function () {
+          window.location.href = "reports.html";
+        });
+
+      function fetchStatusResults(formData) {
+        let query = formData ? new URLSearchParams(formData).toString() : "";
+        fetch("day-car-status.php?" + query)
+          .then((response) => response.json())
+          .then((data) => {
+            const statusTableBody =
+              document.querySelector("#statusTable tbody");
+            statusTableBody.innerHTML = "";
+            if (data.error) {
+              alert(data.error);
+            } else {
+              data.forEach((result) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                                <td>${result.Car_ID}</td>
+                                <td>${result.plate_id}</td>
+                                <td>${result.brand}</td>
+                                <td>${result.model}</td>
+                                <td>${result.color}</td>
+                                <td>${result.year}</td>
+                                <td>${result.price}</td>
+                                <td>${result.status}</td>
+                                <td>${result.location}</td>
+                            `;
+                statusTableBody.appendChild(row);
+              });
+            }
+          });
+      }
+    </script>
+  </body>
+</html>

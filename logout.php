@@ -2,6 +2,6 @@
 session_start();
 session_unset();
 session_destroy();
-header("Location: login.html");
+header("Location: http://localhost/car-rental-system");
 exit();
 ?>
