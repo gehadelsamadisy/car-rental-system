@@ -12,19 +12,23 @@
         background-color: #f0f0f0;
         font-family: Arial, sans-serif;
       }
+
       .container {
         width: 80%;
         margin-top: 20px;
       }
+
       .form-group {
         margin: 10px 0;
       }
+
       .form-group input,
       .form-group select {
         padding: 10px;
         width: 100%;
         box-sizing: border-box;
       }
+
       .button {
         padding: 10px;
         background-color: #007bff;
@@ -33,30 +37,36 @@
         border-radius: 5px;
         cursor: pointer;
       }
+
       .button:hover {
         background-color: #0056b3;
       }
+
       table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
       }
+
       table,
       th,
       td {
         border: 1px solid #ddd;
       }
+
       th,
       td {
         padding: 10px;
         text-align: left;
       }
+
       th {
         background-color: #007bff;
         color: white;
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <h1>View Cars</h1>
@@ -97,6 +107,7 @@
         </tbody>
       </table>
     </div>
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const searchForm = document.getElementById("searchForm");
@@ -137,55 +148,48 @@
                                 <td>${car.status}</td>
                                 <td>${car.location}</td>
                                 <td>
-                                  ${
-                                    !car.isAdmin && car.status === "Active"
-                                      ? `
-                                    <form action="customer-rent-car.php" method="POST" style="display:inline;">
-                                      <input type="hidden" name="car_id" value="${car.Car_ID}">
-                                      <input type="hidden" name="user_email" value="${car.user_email}">
-                                      <button type="submit" class="button">Rent</button>
-                                    </form>
-                                  `
-                                      : ""
-                                  }
-                                </td>
+  ${
+    // If the user is not an admin and the car is active, show the rent button
+    !car.isAdmin && car.status === "Active"
+      ? `
+        <form action="customer-rent-car.html" method="GET" style="display:inline;">
+          <input type="hidden" name="car_id" value="${car.Car_ID}">
+          <button type="submit" class="button">Rent</button>
+        </form>
+      `
+      : ""
+  }
+</td>
+
+                                
                                 ${
-                                  car.isAdmin
-                                    ? `
-                                <td>
-                                  <form action="update-car-status.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="car_id" value="${
-                                      car.Car_ID
-                                    }">
-                                    <select name="status">
-                                      <option value="Active" ${
-                                        car.status === "Active"
-                                          ? "selected"
-                                          : ""
-                                      }>Active</option>
-                                      <option value="Out of Service" ${
-                                        car.status === "Out of Service"
-                                          ? "selected"
-                                          : ""
-                                      }>Out of Service</option>
-                                      <option value="Rented" ${
-                                        car.status === "Rented"
-                                          ? "selected"
-                                          : ""
-                                      }>Rented</option>
-                                    </select>
-                                    <button type="submit" class="button">Update</button>
-                                  </form>
-                                  <form action="admin-rent-car.html" method="GET" style="display:inline;">
-                                    <input type="hidden" name="car_id" value="${
-                                      car.Car_ID
-                                    }">
-                                    <button type="submit" class="button">Rent</button>
-                                  </form>
-                                </td>
-                                `
-                                    : ""
-                                }
+  car.isAdmin
+    ? `
+    <td>
+      <form action="update-car-status.php" method="POST" style="display:inline;">
+        <input type="hidden" name="car_id" value="${car.Car_ID}">
+        <select name="status">
+          <option value="Active" ${car.status === "Active" ? "selected" : ""}>Active</option>
+          <option value="Out of Service" ${car.status === "Out of Service" ? "selected" : ""}>Out of Service</option>
+          <option value="Rented" ${car.status === "Rented" ? "selected" : ""}>Rented</option>
+        </select>
+        <button type="submit" class="button">Update</button>
+      </form>
+      ${
+        car.status !== "Rented"
+          ? `
+            <form action="admin-rent-car.html" method="GET" style="display:inline;">
+              <input type="hidden" name="car_id" value="${car.Car_ID}">
+              <button type="submit" class="button">Rent</button>
+            </form>
+          `
+          : ""
+      }
+    </td>
+    `
+    : ""
+}
+
                              
                             `;
                 carTableBody.appendChild(row);

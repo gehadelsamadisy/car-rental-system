@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rent Car</title>
+    <style>
+      /* Apply a simple reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column; /* Ensures the title and form stack vertically */
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px; /* Space between title and form */
+        color: #333;
+      }
+
+      #rentCarForm {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #rentCarForm div {
+        margin-bottom: 15px;
+        width: 100%;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      input[type="date"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Rent Car</h1>
+    <form id="rentCarForm" action="customer-rent-car.php" method="POST">
+      <input type="hidden" id="car_id" name="car_id">
+      <div>
+        <label for="pickup_date">Pickup Date:</label>
+        <input type="date" id="pickup_date" name="pickup_date" required />
+      </div>
+      <div>
+        <label for="return_date">Return Date:</label>
+        <input type="date" id="return_date" name="return_date" required />
+      </div>
+      <button type="submit" class="button">Confirm Rent</button>
+    </form>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('rentCarForm');
+        const carId = new URLSearchParams(window.location.search).get('car_id');
+        
+        // Set car_id
+        document.getElementById('car_id').value = carId;
+      });
+    </script>
+  </body>
+</html>
