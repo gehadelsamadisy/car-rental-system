@@ -81,6 +81,7 @@
           <input type="text" name="color" placeholder="Color" />
         </div>
         <button type="submit" class="button">Search</button>
+        <button onclick="location.href='adminhome.html'" class="button">Back</button>
       </form>
       <!-- <button type="button" class="button advanced-search-button" onclick="location.href='advanced-search.html'">Advanced Search</button> -->
       <table>
@@ -187,7 +188,8 @@
                                     <input type="hidden" name="car_id" value="${
                                       car.Car_ID
                                     }">
-                                    <button type="submit" class="button">Rent</button>
+                                    
+                                    <button type="submit" class="button" ${car.status !== "Active" ? "style='display:none;'" : ""}>Rent</button>
                                   </form>
                                 </td>
                                 `
@@ -199,7 +201,8 @@
                 if (car.isAdmin) {
                   carIdHeader.style.display = "table-cell";
                   plateIdHeader.style.display = "table-cell";
-                  changeStatusHeader.style.display = "table-cell";
+                  changeStatusHeader.style.display = "table-cell";                } else {
+                  window.location.href = "customer-rent-car.html";
                 }
               });
             });

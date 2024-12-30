@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Cars (Admin)</title>
+    <style>
+      /* ...existing styles... */
+    </style>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>View Cars (Admin)</h1>
+      <form id="searchForm">
+        <!-- ...existing form fields... -->
+        <button type="submit" class="button">Search</button>
+      </form>
+      <table>
+        <thead>
+          <tr>
+            <th>Car ID</th>
+            <th>Plate ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Year</th>
+            <th>Price / month</th>
+            <th>Status</th>
+            <th>Office Location</th>
+            <th>Action</th>
+            <th>Change Status</th>
+          </tr>
+        </thead>
+        <tbody id="carTableBody">
+          <!-- Car rows will be inserted here by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchForm = document.getElementById("searchForm");
+        searchForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          fetchCars(new FormData(searchForm));
+        });
+
+        fetchCars();
+
+        function fetchCars(formData = null) {
+          let query = "";
+          if (formData) {
+            query = new URLSearchParams(formData).toString();
+          }
+          fetch("get-cars.php?" + query)
+            .then((response) => response.json())
+            .then((data) => {
+              const carTableBody = document.getElementById("carTableBody");
+              carTableBody.innerHTML = "";
+              data.forEach((car) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                  <td>${car.Car_ID}</td>
+                  <td>${car.plate_id}</td>
+                  <td>${car.brand}</td>
+                  <td>${car.model}</td>
+                  <td>${car.color}</td>
+                  <td>${car.year}</td>
+                  <td>${car.price}</td>
+                  <td>${car.status}</td>
+                  <td>${car.location}</td>
+                  <td>
+                    <form action="admin-rent-car.html" method="GET" style="display:inline;">
+                      <input type="hidden" name="car_id" value="${car.Car_ID}">
+                      <button type="submit" class="button">Rent</button>
+                    </form>
+                  </td>
+                  <td>
+                    <form action="update-car-status.php" method="POST" style="display:inline;">
+                      <input type="hidden" name="car_id" value="${car.Car_ID}">
+                      <select name="status">
+                        <option value="Active" ${car.status === "Active" ? "selected" : ""}>Active</option>
+                        <option value="Out of Service" ${car.status === "Out of Service" ? "selected" : ""}>Out of Service</option>
+                        <option value="Rented" ${car.status === "Rented" ? "selected" : ""}>Rented</option>
+                      </select>
+                      <button type="submit" class="button">Update</button>
+                    </form>
+                  </td>
+                `;
+                carTableBody.appendChild(row);
+              });
+            });
+        }
+      });
+    </script>
+  </body>
+</html>
