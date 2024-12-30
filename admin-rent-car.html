@@ -43,28 +43,49 @@
   </head>
   <body>
     <div class="container">
-      <h1>Rent Car</h1>
+      <h1 id="rent-car-title">rent car</h1>
       <form action="admin-rent-car.php" method="POST">
         <div class="form-group">
-          <label for="customer_id">Customer ID:</label>
-          <input
-            type="text"
-            id="customer_id"
-            name="customer_id"
-            required
-          />
+            <label for="customer_id">Customer ID:</label>
+            <input
+                type="text"
+                id="customer_id"
+                name="customer_id"
+                required
+            />
         </div>
         <div class="form-group">
-          <label for="pickup_date">Pickup Date:</label>
-          <input type="date" id="pickup_date" name="pickup_date" required />
+            <label for="pickup_date">Pickup Date:</label>
+            <input type="date" id="pickup_date" name="pickup_date" required />
         </div>
         <div class="form-group">
-          <label for="return_date">Return Date:</label>
-          <input type="date" id="return_date" name="return_date" required />
+            <label for="return_date">Return Date:</label>
+            <input type="date" id="return_date" name="return_date" required />
         </div>
-        <input type="hidden" name="car_id" value="<?php echo $_GET['car_id']; ?>" />
+        <!-- Hidden field for car_id -->
+        <input type="hidden" id="car_id" name="car_id" value="" />
+        
         <button type="submit" class="button">Rent</button>
-      </form>
+    </form>
+    
     </div>
+    <script>
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Get the car_id parameter from the URL
+        var carId = getUrlParameter('car_id');
+
+        // Display the sentence with the car_id
+        document.getElementById('rent-car-title').innerText = 'rent car with id ' + carId;
+
+        // Set the car_id value in the hidden input field
+        document.getElementById('car_id').value = carId;
+    </script>
   </body>
 </html>
