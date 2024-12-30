@@ -12,10 +12,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$isAdmin = isset($_SESSION['admin_email']);
 $conditions = [];
 
-// Add conditions based on the filters provided
 if (!empty($_GET['brand'])) {
     $conditions[] = "cars.brand LIKE '%" . $conn->real_escape_string($_GET['brand']) . "%'";
 }
@@ -28,26 +26,30 @@ if (!empty($_GET['year'])) {
 if (!empty($_GET['color'])) {
     $conditions[] = "cars.color LIKE '%" . $conn->real_escape_string($_GET['color']) . "%'";
 }
-if (!empty($_GET['customer_name'])) {
-    $conditions[] = "reservations.customer_name LIKE '%" . $conn->real_escape_string($_GET['customer_name']) . "%'";
-}
-if (!empty($_GET['customer_email'])) {
-    $conditions[] = "reservations.customer_email LIKE '%" . $conn->real_escape_string($_GET['customer_email']) . "%'";
-}
-if (!empty($_GET['reservation_date'])) {
-    $conditions[] = "reservations.reservation_date = '" . $conn->real_escape_string($_GET['reservation_date']) . "'";
+
+if (!empty($_GET['location'])) {
+    $conditions[] = "offices.location LIKE '%" . $conn->real_escape_string($_GET['location']) . "%'";
 }
 
-// Join `reservations` table to get customer details
-$sql = "SELECT 
-            cars.*, 
-            offices.location, 
-            reservations.customer_name, 
-            reservations.customer_email, 
-            reservations.reservation_date 
-        FROM cars 
-        JOIN offices ON cars.office_id = offices.office_id
-        LEFT JOIN reservations ON cars.Car_ID = reservations.car_id";
+if (!empty($_GET['fname'])) {
+    $conditions[] = "customers.fname LIKE '%" . $conn->real_escape_string($_GET['fname']) . "%'";
+}
+if (!empty($_GET['lname'])) {
+    $conditions[] = "customers.lname LIKE '%" . $conn->real_escape_string($_GET['lname']) . "%'";
+}
+if (!empty($_GET['phone'])) {
+    $conditions[] = "customers.phone LIKE '%" . $conn->real_escape_string($_GET['phone']) . "%'";
+}
+if (!empty($_GET['reservationDate'])) {
+    $conditions[] = "reservations.reservation_date = '" . $conn->real_escape_string($_GET['reservationDate']) . "'";
+}
+
+$sql = "SELECT cars.Car_ID, cars.plate_id, cars.brand, cars.model, cars.color, cars.year, cars.price, cars.status, offices.location, customers.fname, customers.lname, customers.phone, customers.address, customers.email, reservations.reservation_date, reservations.pickup_date, reservations.return_date
+        FROM cars
+        LEFT JOIN reservations ON cars.Car_ID = reservations.car_id
+        LEFT JOIN customers ON reservations.customer_id = customers.customer_id
+        LEFT JOIN offices ON cars.office_id = offices.office_id";
+
 
 if (count($conditions) > 0) {
     $sql .= " WHERE " . implode(" AND ", $conditions);
@@ -57,7 +59,6 @@ $result = $conn->query($sql);
 
 $cars = [];
 while ($row = $result->fetch_assoc()) {
-    $row['isAdmin'] = $isAdmin;
     $cars[] = $row;
 }
 

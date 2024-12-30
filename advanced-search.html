@@ -73,25 +73,21 @@
         <div class="form-group">
           <input type="text" name="color" placeholder="Color" />
         </div>
+
         <div class="form-group">
           <input type="text" name="fname" placeholder="First Name" />
         </div>
+
         <div class="form-group">
           <input type="text" name="lname" placeholder="Last Name" />
         </div>
+
         <div class="form-group">
-          <input
-            type="text"
-            name="customer_email"
-            placeholder="Customer Email"
-          />
+          <input type="text" name="phone" placeholder="Phone Number" />
         </div>
+
         <div class="form-group">
-          <input
-            type="date"
-            name="reservation_date"
-            placeholder="Reservation Date"
-          />
+          <input type="date" id="reservationDate" name="reservationDate" />
         </div>
         <button type="submit" class="button">Search</button>
       </form>
@@ -110,9 +106,13 @@
             <th>Office Location</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Customer Email</th>
+            <th>Phone Number</th>
+            <th>Address</th>
             <th>Reservation Date</th>
+            <th>Pickup Date</th>
+            <th>Return Date</th>
             <th>Action</th>
+            <!-- <th>Action</th> -->
             <th id="changeStatusHeader" style="display: none">Change Status</th>
           </tr>
         </thead>
@@ -136,7 +136,7 @@
           if (formData) {
             query = new URLSearchParams(formData).toString();
           }
-          fetch("get-cars.php?" + query)
+          fetch("advanced-search.php?" + query)
             .then((response) => response.json())
             .then((data) => {
               const carTableBody = document.getElementById("carTableBody");
@@ -148,74 +148,77 @@
               data.forEach((car) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                                    ${
-                                      car.isAdmin
-                                        ? `<td>${car.Car_ID}</td><td>${car.plate_id}</td>`
-                                        : ""
-                                    }
-                                    <td>${car.brand}</td>
-                                    <td>${car.model}</td>
-                                    <td>${car.color}</td>
-                                    <td>${car.year}</td>
-                                    <td>${car.price}</td>
-                                    <td>${car.status}</td>
-                                    <td>${car.location}</td>
-                                    <td>${car.fname || "N/A"}</td>
-                                    <td>${car.lname || "N/A"}</td>
-                                    <td>${car.customer_email || "N/A"}</td>
-                                    <td>${car.reservation_date || "N/A"}</td>
-                                    <td>
-                                        ${
-                                          !car.isAdmin &&
-                                          car.status === "Active"
-                                            ? `
-                                                <form action="customer-rent-car.php" method="POST" style="display:inline;">
-                                                    <input type="hidden" name="car_id" value="${car.Car_ID}">
-                                                    <button type="submit" class="button">Rent</button>
-                                                </form>
-                                            `
-                                            : ""
-                                        }
-                                    </td>
-                                    ${
-                                      car.isAdmin
-                                        ? `
-                                    <td>
-                                        <form action="update-car-status.php" method="POST" style="display:inline;">
-                                            <input type="hidden" name="car_id" value="${
-                                              car.Car_ID
-                                            }">
-                                            <select name="status">
-                                                <option value="Active" ${
-                                                  car.status === "Active"
-                                                    ? "selected"
-                                                    : ""
-                                                }>Active</option>
-                                                <option value="Out of Service" ${
-                                                  car.status ===
-                                                  "Out of Service"
-                                                    ? "selected"
-                                                    : ""
-                                                }>Out of Service</option>
-                                                <option value="Rented" ${
-                                                  car.status === "Rented"
-                                                    ? "selected"
-                                                    : ""
-                                                }>Rented</option>
-                                            </select>
-                                            <button type="submit" class="button">Update</button>
-                                        </form>
-                                        <form action="admin-rent-car.html" method="GET" style="display:inline;">
-                                            <input type="hidden" name="car_id" value="${
-                                              car.Car_ID
-                                            }">
-                                            <button type="submit" class="button">Rent</button>
-                                        </form>
-                                    </td>
-                                    `
-                                        : ""
-                                    }
-                                `;
+                                ${
+                                  car.isAdmin
+                                    ? `<td>${car.Car_ID}</td><td>${car.plate_id}</td>`
+                                    : ""
+                                }
+                                <td>${car.brand}</td>
+                                <td>${car.model}</td>
+                                <td>${car.color}</td>
+                                <td>${car.year}</td>
+                                <td>${car.price}</td>
+                                <td>${car.status}</td>
+                                <td>${car.location}</td>
+                                <td>${car.fname}</td>
+                                <td>${car.lname}</td>
+                                <td>${car.phone}</td>
+                                <td>${car.address}</td>
+                                <td>${car.reservation_date}</td>
+                                <td>${car.pickup_date}</td>
+                                <td>${car.return_date}</td>
+                                <td>
+                                  ${
+                                    !car.isAdmin && car.status === "Active"
+                                      ? `
+                                    <form action="customer-rent-car.php" method="POST" style="display:inline;">
+                                      <input type="hidden" name="car_id" value="${car.Car_ID}">
+                                      <input type="hidden" name="user_email" value="${car.user_email}">
+                                      <button type="submit" class="button">Rent</button>
+                                    </form>
+                                  `
+                                      : ""
+                                  }
+                                </td>
+                                ${
+                                  car.isAdmin
+                                    ? `
+                                <td>
+                                  <form action="update-car-status.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="car_id" value="${
+                                      car.Car_ID
+                                    }">
+                                    <select name="status">
+                                      <option value="Active" ${
+                                        car.status === "Active"
+                                          ? "selected"
+                                          : ""
+                                      }>Active</option>
+                                      <option value="Out of Service" ${
+                                        car.status === "Out of Service"
+                                          ? "selected"
+                                          : ""
+                                      }>Out of Service</option>
+                                      <option value="Rented" ${
+                                        car.status === "Rented"
+                                          ? "selected"
+                                          : ""
+                                      }>Rented</option>
+                                    </select>
+                                    <button type="submit" class="button">Update</button>
+                                  </form>
+                                  <form action="admin-rent-car.html" method="GET" style="display:inline;">
+                                    <input type="hidden" name="car_id" value="${
+                                      car.Car_ID
+                                    }">
+                                    <button type="submit" class="button">Rent</button>
+                                  </form>
+                                </td>
+                                `
+                                    : ""
+                                }
+                             
+                            `;
                 carTableBody.appendChild(row);
                 if (car.isAdmin) {
                   carIdHeader.style.display = "table-cell";
