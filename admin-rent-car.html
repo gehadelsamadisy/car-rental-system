@@ -66,9 +66,13 @@
         <input type="hidden" id="car_id" name="car_id" value="" />
         
         <button type="submit" class="button">Rent</button>
+        <button class="button" onclick="window.location.href='view-cars.html'">Back</button>
     </form>
     
+    
     </div>
+
+    
     <script>
         // Function to get URL parameters
         function getUrlParameter(name) {
@@ -82,7 +86,7 @@
         var carId = getUrlParameter('car_id');
 
         // Display the sentence with the car_id
-        document.getElementById('rent-car-title').innerText = 'rent car with id ' + carId;
+        document.getElementById('rent-car-title').innerText = 'Rent Car with ID ' + carId;
 
         // Set the car_id value in the hidden input field
         document.getElementById('car_id').value = carId;
